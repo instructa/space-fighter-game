@@ -1,0 +1,42 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# R3F + Koota ECS Base Rules
+
+## Core Architecture
+
+- Use Koota ECS for all game logic.
+- Keep React components purely presentational.
+- Do not mix ECS logic and React rendering.
+- use kebap-case for filenames
+
+## Directory Structure
+```
+viber3d/
+├── src
+│   ├── assets/                 # 3D models, textures, images
+│   ├── components/             # React components for rendering 3D objects/UI
+│   ├── systems/                # ECS Systems for game logic updates
+│   ├── traits/                 # ECS Traits (components) describing entity data
+│   ├── utils/                  # Utility functions (math, sorting, spatial hashing)
+│   ├── actions.ts              # Central actions to spawn or modify entities
+│   ├── app.tsx                 # Main React component (root of your 3D scene)
+│   ├── frameloop.ts             # Main ECS update loop
+│   ├── index.css               # Global CSS or Tailwind CSS (if used)
+│   ├── main.tsx                # React app root, renders <App />
+│   ├── startup.tsx             # Startup logic (initial spawns, intervals)
+│   └── world.ts                # Creates the ECS world with default traits
+├── index.html                  # Basic HTML page with root div
+├── package.json                # Project dependencies and scripts
+└── tsconfig.json               # TypeScript configuration
+```
+
+## Anti-Patterns
+
+- Do not place game logic in React hooks (e.g. `useFrame`), except for purely visual effects.
+- Avoid storing ECS-related state in React state.
+- Never mutate traits inside components. Use systems or actions instead.
+- Do not initialize or destroy ECS entities directly in components (use an action or system).

@@ -1,0 +1,20 @@
+# VIBER3D SPACEWARS - GAME CONTROLS
+
+## SPACECRAFT MOVEMENT
+- W / Up Arrow: Forward thrust
+- S / Down Arrow: Backward thrust/brake
+- A / Left Arrow: Strafe left
+- D / Right Arrow: Strafe right
+- SPACE: Boost (5x forward thrust)
+- Q: Roll left
+- R: Roll right
+- MOUSE: Ship rotation (aim direction)
+
+## GAME CONTROLS
+- MOUSE CLICK: Lock mouse pointer for rotation control
+
+## NOTES
+- The game uses realistic Newtonian physics in zero-gravity
+- Objects in motion stay in motion unless countered with thrust
+- Rotation is independent from movement direction
+- To stop completely, apply thrust in the opposite direction of your movement 

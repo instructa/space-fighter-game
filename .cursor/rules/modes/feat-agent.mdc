@@ -1,0 +1,311 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## Architectural Overview
+
+This starter kit uses an Entity-Component-System (ECS) pattern integrated with React Three Fiber for rendering. When implementing a new feature, keep the following architectural details in mind:
+
+1. Traits (Data)  
+   Each game capability or state element (position, health, AI settings, etc.) is stored in a trait.  
+   A trait is effectively a data container—no logic, just state.
+
+2. Entities  
+   An entity is a collection of traits.  
+   For instance, an enemy might have traits IsEnemy, Movement, and Health.
+
+3. Systems (Logic)  
+   Systems process entities that have the traits they care about.  
+   Each system performs logic and updates entity data each frame (for example, “Move all entities that have Movement and Transform”).
+
+4. Actions (Orchestration)  
+   Actions are convenience functions that modify the world in one-off ways, often for tasks like spawning a new enemy or toggling special modes.
+
+5. React Components (Rendering)  
+   React components read ECS data to render visual representations (for example, using react-three-fiber).  
+   Systems handle game logic; components handle appearance.
+
+6. Frame Loop  
+   A main loop (in frameloop.ts) calls systems in a fixed order once per frame.  
+   This ensures consistent updating before the scene is rendered.
+
+7. Startup Logic (startup.tsx)  
+   The file startup.tsx is a convenient place to handle any one-time initialization or initial spawning of game entities.  
+   If your new feature should exist at the very beginning of the game, you can add it to startup.tsx.
+
+## Visual Architecture
+
+```mermaid
+graph TD
+    subgraph "ECS Core"
+        World["world.ts
+        (ECS world initialization)"]
+        Entities["Entities
+        (Game objects as trait collections)"]
+        Traits["traits/
+        (Data components describing entity properties)"]
+        Systems["systems/
+        (Logic processors that update entity data)"]
+        Actions["actions.ts
+        (API for entity creation and modification)"]
+    end
+
+    subgraph "React Layer"
+        R3F["React Three Fiber
+        (3D rendering framework)"]
+        Components["components/
+        (Visual representations of entities)"]
+        Assets["assets/
+        (3D models, textures, sounds)"]
+        App["app.tsx
+        (Main scene component)"]
+    end
+
+    subgraph "Game Loop"
+        Frameloop["frameloop.ts
+        (Orchestrates system execution order)"]
+        Startup["startup.tsx
+        (Initial world setup and entity spawning)"]
+    end
+
+    subgraph "Utilities"
+        Utils["utils/
+        (Math helpers and optimization functions)"]
+    end
+
+    %% Core Relationships
+    World --> Entities
+    Entities --> Traits
+    World --> Systems
+    World --> Actions
+    
+    %% System Dependencies
+    Frameloop --> Systems
+    
+    %% Action Relationships
+    Actions -.-> Entities
+    
+    %% Component Relationships
+    Components -.-> Traits
+    
+    %% App Structure
+    App --> R3F
+    App --> Components
+    App --> Frameloop
+    
+    %% Startup Flow
+    Startup --> World
+    Startup --> Actions
+    
+    %% Asset Usage
+    Assets -.-> Components
+    
+    %% Systems use utilities
+    Systems -.-> Utils
+    
+    classDef core fill:#f9f,stroke:#333,stroke-width:2px
+    classDef react fill:#bbf,stroke:#333,stroke-width:2px
+    classDef loop fill:#bfb,stroke:#333,stroke-width:2px
+    classDef util fill:#ffe,stroke:#333,stroke-width:2px
+    
+    class World,Entities,Traits,Systems,Actions core
+    class R3F,Components,Assets,App react
+    class Frameloop,Startup loop
+    class Utils util
+```
+
+
+## Implementation Path for Any New Feature
+
+- Feature is used placeholder here. Insert what the feature is about
+
+Whenever you add a feature—such as a power-up mechanic, a special attack, or advanced AI logic—follow these steps:
+
+1. Define or Update Traits  
+   Create or update traits under src/traits to hold new data fields, if needed.  
+   Example files: src/traits/my-new-trait.ts, src/traits/index.ts (to export the new trait).
+
+   Example trait implementations (choose whats best for the current feature)
+   ```ts
+   // src/traits/feature-name.ts
+   import { trait, relation } from 'koota';
+   import * as THREE from 'three';
+
+   // Tag trait (no data)
+   export const IsFeature = trait();
+
+   // Data trait (correct format)
+   export const FeatureData = trait({
+   property1: 5,  // Default value
+   property2: new THREE.Vector3(0, 1, 0), // Default THREE.js object
+   // Do not include string argument like 'FeatureData'
+   });
+
+   // For relationships between entities
+   export const FeatureRelation = relation();
+   ```
+
+2. Create Systems - Create or Modify Systems  
+   Write one or more systems in src/systems/ to operate on the new trait(s).  
+   These systems handle how the data changes frame by frame (for example, using world.query(MyNewTrait, ...)).
+
+   Example systems implementation:
+   ```ts
+   // src/systems/feature-system.ts
+   import { World } from 'koota';
+   import { Entity } from 'koota';
+   import { IsFeature, FeatureData, Transform, Time } from '../traits';
+   import * as THREE from 'three';
+
+   export function featureSystem(world: World) {
+      // Get global data like time
+      const time = world.get(Time);
+      if (!time) return;
+      
+      // Query and process entities
+      world.query(IsFeature, FeatureData, Transform).forEach((entity: Entity) => {
+         const data = entity.get(FeatureData)!;
+         const transform = entity.get(Transform)!;
+         
+         // System logic here
+         if (data.isActive) {
+            transform.position.x += data.property1 * time.delta;
+         }
+      });
+   }
+   ```
+
+3. Define Actions - Spawn or Initialize Entities  
+   Use actions or an existing setup routine (such as in startup.tsx) to create or tag entities with the new trait(s).  
+   Actions are typically declared in src/actions.ts.
+
+   Example action.ts update with feature
+   ```ts
+   // In src/actions.ts
+   import { Transform, IsFeature, FeatureData } from './traits';
+
+   export const actions = createActions((world) => ({
+      // Existing actions...
+   
+      spawnFeature: (position = new THREE.Vector3(0, 0, 0)) => {
+         return world.spawn(
+            IsFeature()
+            Transform({
+               position: position.clone(),
+               rotation: rotation.clone(),
+            }),
+         );
+      }
+   }));
+   ```
+
+4. Add or Update Render Components  
+   If the new feature requires a visual element, create or modify a React component in src/components/.  
+
+   - In the component, use a query hook like useQuery(MyNewTrait, Transform) or similar, then return the appropriate 3D objects for each matching entity.  
+
+   - Example renderer implementation
+   ```tsx
+   // src/components/feature-renderer.tsx
+   import { Entity } from 'koota';
+   import { useQuery, useTraitEffect } from 'koota/react';
+   import { useCallback, useRef } from 'react';
+   import * as THREE from 'three';
+   import { IsFeature, Transform, Ref, FeatureData } from '../traits';
+
+   // View for a single entity
+   function FeatureView({ entity }: { entity: Entity }) {
+   const meshRef = useRef<THREE.Mesh>(null!);
+   
+   // Initialize and connect mesh to entity
+   const setInitial = useCallback(
+      (mesh: THREE.Mesh | null) => {
+         if (!mesh) return;
+         entity.add(Ref(mesh));
+         meshRef.current = mesh;
+      },
+      [entity]
+   );
+   
+   // Sync mesh with entity data
+   useTraitEffect(entity, Transform, (transform) => {
+      if (meshRef.current && transform) {
+         meshRef.current.position.copy(transform.position);
+         meshRef.current.rotation.copy(transform.rotation);
+         meshRef.current.scale.copy(transform.scale);
+      }
+   });
+   
+   return (
+      <mesh ref={setInitial}>
+         <boxGeometry />
+         <meshBasicMaterial color="blue" />
+      </mesh>
+   );
+   }
+
+   // Container component that queries and renders all features
+   export function FeatureRenderer() {
+   const features = useQuery(IsFeature, Transform);
+   return (
+      <>
+         {features.map((feature) => (
+         <FeatureView key={feature.id()} entity={feature} />
+         ))}
+      </>
+   );
+   }
+   ```
+
+5. Integrate into the Frame Loop  
+   In src/frameloop.ts, ensure that your new system function is called in the correct order relative to other logic.  
+   
+   Add system to frameloop
+   ```ts
+   //src/frameloop.ts
+   useFrame(() => {
+      // Existing systems...
+      
+      // Game systems - ADD YOUR SYSTEM HERE
+      featureSystem(world);
+   });
+   ```
+
+6. Add renderer to App
+   ```ts
+   // src/app.tsx
+   import { Canvas } from '@react-three/fiber';
+   import { FeatureRenderer } from './components/feature-renderer';
+   // Other imports...
+
+   export function App() {
+      return (
+         <div className="game-container">
+            <Canvas>
+            
+               <FeatureRenderer /> {/* Add your renderer here */}
+            
+            </Canvas>
+         </div>
+      );
+   }
+   ```
+
+7. startup.tsx
+   If your feature must be present at game start, call its spawn or initialization action in startup.tsx.
+
+   Example to show we spawn new entity alongside others:
+   ```ts
+   export function Startup() {
+     const { spawnMyNewEntity } = useActions(actions);
+
+     useEffect(() => {
+
+       spawnMyNewEntity(); // add the spawn here
+
+     }, [spawnMyNewEntity]);
+
+      // return and if necessary add destroy or clearInterval for the entity
+   }
+   ```

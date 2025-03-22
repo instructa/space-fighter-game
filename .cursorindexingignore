@@ -1,0 +1,12 @@
+public/**
+.vscode/**
+prompts/**/*.md
+.planr/stories/*.md
+.planr/core/*.md
+.planr/assetlist.md
+.planr/*.md
+.planr/*.json
+.cursor/rule_patches/*.md
+.cursor/templates/*.md
+CHANGELOG.md
+README.md

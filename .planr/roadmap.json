@@ -1,0 +1,119 @@
+[
+	{
+		"id": "US-001",
+		"title": "Control Spacecraft Movement",
+		"file": ".planr/stories/US-001.md",
+		"status": "done",
+		"created": "2023-11-25",
+		"updated": "2023-11-25",
+		"notes": "Implemented WASD and Space controls using Newtonian physics for spacecraft movement in zero gravity with responsive controls and velocity persistence"
+	},
+	{
+		"id": "US-005",
+		"title": "Smooth Camera Follow",
+		"file": ".planr/stories/US-005.md",
+		"status": "done",
+		"created": "2023-11-25",
+		"updated": "2023-11-25",
+		"notes": "Implemented smooth camera following with offset, interpolation, and rotation synchronization with optimal player tracking"
+	},
+	{
+		"id": "US-003",
+		"title": "Navigate in Zero-Gravity Space",
+		"file": ".planr/stories/US-003.md",
+		"status": "done",
+		"created": "2023-11-25",
+		"updated": "2023-11-25",
+		"notes": "Implemented realistic Newtonian physics with independent rotation, WASD directional thrust, Space boost, Q/R roll controls and proper velocity persistence in zero-gravity"
+	},
+	{
+		"id": "US-002",
+		"title": "Shoot Projectiles",
+		"file": ".planr/stories/US-002.md",
+		"status": "todo",
+		"created": "2023-11-25",
+		"updated": "2023-11-25",
+		"notes": "Implement projectile shooting with mouse input, collision detection and damage application"
+	},
+	{
+		"id": "US-004",
+		"title": "Avoid or Destroy Asteroids",
+		"file": ".planr/stories/US-004.md",
+		"status": "todo",
+		"created": "2023-11-25",
+		"updated": "2023-11-25",
+		"notes": "Implement asteroid spawning, collision detection, health system and scoring"
+	},
+	{
+		"id": "US-010",
+		"title": "Handle Spacecraft Destruction",
+		"file": ".planr/stories/US-010.md",
+		"status": "todo",
+		"created": "2023-11-25",
+		"updated": "2023-11-25",
+		"notes": "Implement game over state with score submission and restart options"
+	},
+	{
+		"id": "US-006",
+		"title": "Handle Multiple Enemy Shots",
+		"file": ".planr/stories/US-006.md",
+		"status": "todo",
+		"created": "2023-11-25",
+		"updated": "2023-11-25",
+		"notes": "Implement projectile pooling system and optimized collision detection for multiple shots"
+	},
+	{
+		"id": "US-012",
+		"title": "Enemy AI Shooting",
+		"file": ".planr/stories/US-012.md",
+		"status": "todo",
+		"created": "2023-11-25",
+		"updated": "2023-11-25",
+		"notes": "Implement enemy targeting, shooting and spawn systems with difficulty scaling"
+	},
+	{
+		"id": "US-011",
+		"title": "Pause and Resume Game",
+		"file": ".planr/stories/US-011.md",
+		"status": "todo",
+		"created": "2023-11-25",
+		"updated": "2023-11-25",
+		"notes": "Create pause functionality with state preservation and menu UI"
+	},
+	{
+		"id": "US-013",
+		"title": "Score Points",
+		"file": ".planr/stories/US-013.md",
+		"status": "todo",
+		"created": "2023-11-25",
+		"updated": "2023-11-25",
+		"notes": "Create scoring system with real-time UI updates and point values for different targets"
+	},
+	{
+		"id": "US-009",
+		"title": "View Leaderboard",
+		"file": ".planr/stories/US-009.md",
+		"status": "todo",
+		"created": "2023-11-25",
+		"updated": "2023-11-25",
+		"notes": "Create real-time leaderboard with ranking and personalized player statistics"
+	},
+	{
+		"id": "US-014",
+		"title": "Start New Game",
+		"file": ".planr/stories/US-014.md",
+		"status": "todo",
+		"created": "2023-11-25",
+		"updated": "2023-11-25",
+		"notes": "Implement main menu and game initialization with default player state"
+	},
+	{
+		"id": "US-016",
+		"title": "Debug Performance Metrics View",
+		"file": ".planr/stories/US-016.md",
+		"status": "todo",
+		"created": "2024-04-23",
+		"updated": "2024-04-23",
+		"notes": "Implement performance metrics display (FPS, memory, entity counts, render stats) with toggle functionality and color-coded indicators"
+	}
+]

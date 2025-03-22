@@ -1,0 +1,27 @@
+---
+description: React Three Fiber Component Rules
+globs: src/components/**/*.tsx
+alwaysApply: false
+---
+
+# Component Guidelines
+
+## Core Principles
+
+- Components only render visuals; use `useTraitEffect` to reflect trait changes.
+- Use functional components for R3F with ECS data read via hooks.
+- Keep components strictly presentational. All game logic should reside in systems.
+- Use `useTraitEffect(entity, Trait, callback)` to reflect ECS changes on mesh references.
+- Always use `useCallback` for ref initialization functions to maintain referential stability
+
+## Asset Loading and Cleanup
+
+- Use React Three Fiber helpers like `useGLTF` or `useTexture` for loading models or textures.
+- Dispose geometry and materials in a cleanup function if creating many dynamic objects over time.
+
+## Anti-Patterns
+
+- Do not place ECS or game logic in React state.
+- Do not mutate ECS traits directly from a component. Use systems or actions.
+- Do not rely on `useFrame` for core game logic; reserve it for minor visual effects only.
+
